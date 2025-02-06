@@ -8,3 +8,9 @@
     <p>Track your spending with ease!</p>
 </body>
 </html>
+<h2>Set Spending Limits:</h2>
+<ul>
+    {% for category, limit in limits.items() %}
+        <li><strong>{{ category.capitalize() }}</strong>: ₹{{ limit }} (Spent: ₹{{ expenses[category] }})</li>
+    {% endfor %}
+</ul>
