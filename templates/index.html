@@ -3,87 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   from flask import Flask, render_template, request
-
-app = Flask(__name__)
-
-# Default spending limits and expenses
-spending_limits = {"food": 500, "shopping": 300, "entertainment": 200, "transport": 150}
-expenses = {"food": 0, "shopping": 0, "entertainment": 0, "transport": 0}
-
-@app.route("/", methods=["GET", "POST"])
-def home():
-    global spending_limits  # Ensure we modify the global dictionary
-
-    if request.method == "POST":
-        action = request.form.get("action")
-
-        # If user is adding an expense
-        if action == "add_expense":
-            category = request.form.get("category")
-            amount = float(request.form.get("amount", 0))
-            if category in expenses:
-                expenses[category] += amount  # Add expense to category
-
-        # If user is setting a new limit
-        elif action == "set_limit":
-            category = request.form.get("category")
-            new_limit = float(request.form.get("new_limit", 0))
-            if category in spending_limits:
-                spending_limits[category] = new_limit  # Update the limit
-
-    return render_template("index.html", spending_limits=spending_limits, expenses=expenses)
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
-
-    <form method="POST">
-        <label for="category">Category:</label>
-        <select name="category">
-            {% for category in spending_limits.keys() %}
-                <option value="{{ category }}">{{ category.capitalize() }}</option>
-            {% endfor %}
-        </select>
-        
-        <label for="amount">Amount (₹):</label>
-        <input type="number" name="amount" required>
-        <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pennypilot</title>
+    <title>Pennypilot - Budget Tracker</title>
 </head>
 <body>
-    <h1>Welcome to Pennypilot</h1>                                                                                                               
-    <p>Track your spending with ease!</p>
+    <h1>Welcome to Pennypilot</h1>
+    <p>Track your spending and manage your budget with ease.</p>
 
-    <h2>Set Spending Limits:</h2>
-    <ul>
-        {% for category, limit in spending_limits.items() %}
-            <li><strong>{{ category.capitalize() }}</strong>: ₹{{ limit }} (Spent: ₹{{ expenses[category] }})</li>
-        {% endfor %}
-    </ul>
+    <!-- Display Spending Limits and Expenses -->
+    <h2>Current Spending Limits:</h2>
+    {% if spending_limits %}
+        <ul>
+            {% for category, limit in spending_limits.items() %}
+                <li>
+                    <strong>{{ category.capitalize() }}</strong>: ₹{{ limit }} 
+                    (Spent: ₹{{ expenses.get(category, 0) }})
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No spending limits set yet. Add a category below!</p>
+    {% endif %}
 
     <!-- Form to Set a New Spending Limit -->
-    <h2>Set a New Limit:</h2>
+    <h2>Set a Spending Limit:</h2>
     <form method="POST">
         <input type="hidden" name="action" value="set_limit">
         <label for="category">Category:</label>
-        <select name="category">
-            {% for category in spending_limits.keys() %}
-                <option value="{{ category }}">{{ category.capitalize() }}</option>
-            {% endfor %}
-        </select>
-        
-        <label for="new_limit">New Limit (₹):</label>
+        <input type="text" name="category" required placeholder="e.g., Food">
+
+        <label for="new_limit">Spending Limit (₹):</label>
         <input type="number" name="new_limit" required>
-        
-        <button type="submit">Update Limit</button>
+
+        <button type="submit">Set Limit</button>
     </form>
 
     <!-- Form to Add an Expense -->
     <h2>Add an Expense:</h2>
+    {% if spending_limits %}
     <form method="POST">
         <input type="hidden" name="action" value="add_expense">
         <label for="category">Category:</label>
@@ -92,16 +48,14 @@ if __name__ == "__main__":
                 <option value="{{ category }}">{{ category.capitalize() }}</option>
             {% endfor %}
         </select>
-        
-        <label for="amount">Amount (₹):</label>
+
+        <label for="amount">Expense Amount (₹):</label>
         <input type="number" name="amount" required>
-        
-        <button type="submit">Add Expense</button>
-    </form>
-</body>
-</html>
 
         <button type="submit">Add Expense</button>
     </form>
+    {% else %}
+        <p><em>Set a spending limit first before adding expenses.</em></p>
+    {% endif %}
 </body>
 </html>
