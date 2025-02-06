@@ -2,23 +2,36 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-# Store spending limits and expenses
+# Initialize spending limits and expenses as empty dictionaries
 spending_limits = {}
 expenses = {}
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST", "HEAD"])  # Now supports HEAD requests
 def home():
-    global spending_limits, expenses  # Ensure we modify global dictionaries
+    if request.method == "HEAD":
+        return "", 200  # Empty response for HEAD request
 
     if request.method == "POST":
         action = request.form.get("action")
 
-        # If user is setting a new spending limit
         if action == "set_limit":
-            category = request.form.get("category").lower()
-            new_limit = float(request.form.get("new_limit", 0))
-            spending_limits[category] = new_limit  # Set limit
-            expenses[category] = 0  # Initialize expense for this category
+            category = request.form.get("category")
+            new_limit = request.form.get("new_limit")
 
-        # If user is adding an expense
-        e
+            if category and new_limit:
+                spending_limits[category.lower()] = float(new_limit)
+                expenses[category.lower()] = 0  # Initialize category expense
+
+        elif action == "add_expense":
+            category = request.form.get("category")
+            amount = request.form.get("amount")
+
+            if category and amount:
+                category = category.lower()
+                if category in expenses:
+                    expenses[category] += float(amount)
+
+    return render_template("index.html", spending_limits=spending_limits, expenses=expenses)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
