@@ -14,3 +14,14 @@
         <li><strong>{{ category.capitalize() }}</strong>: ₹{{ limit }} (Spent: ₹{{ expenses[category] }})</li>
     {% endfor %}
 </ul>
+<form method="POST">
+    <label for="category">Category:</label>
+    <select name="category">
+        {% for category in limits.keys() %}
+            <option value="{{ category }}">{{ category.capitalize() }}</option>
+        {% endfor %}
+    </select>
+    <label for="amount">Amount (₹):</label>
+    <input type="number" name="amount" required>
+    <button type="submit">Add Expense</button>
+</form>
