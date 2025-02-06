@@ -26,7 +26,60 @@
         
         <label for="amount">Amount (₹):</label>
         <input type="number" name="amount" required>
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pennypilot</title>
+</head>
+<body>
+    <h1>Welcome to Pennypilot</h1>                                                                                                               
+    <p>Track your spending with ease!</p>
+
+    <h2>Set Spending Limits:</h2>
+    <ul>
+        {% for category, limit in spending_limits.items() %}
+            <li><strong>{{ category.capitalize() }}</strong>: ₹{{ limit }} (Spent: ₹{{ expenses[category] }})</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Form to Set a New Spending Limit -->
+    <h2>Set a New Limit:</h2>
+    <form method="POST">
+        <input type="hidden" name="action" value="set_limit">
+        <label for="category">Category:</label>
+        <select name="category">
+            {% for category in spending_limits.keys() %}
+                <option value="{{ category }}">{{ category.capitalize() }}</option>
+            {% endfor %}
+        </select>
         
+        <label for="new_limit">New Limit (₹):</label>
+        <input type="number" name="new_limit" required>
+        
+        <button type="submit">Update Limit</button>
+    </form>
+
+    <!-- Form to Add an Expense -->
+    <h2>Add an Expense:</h2>
+    <form method="POST">
+        <input type="hidden" name="action" value="add_expense">
+        <label for="category">Category:</label>
+        <select name="category">
+            {% for category in spending_limits.keys() %}
+                <option value="{{ category }}">{{ category.capitalize() }}</option>
+            {% endfor %}
+        </select>
+        
+        <label for="amount">Amount (₹):</label>
+        <input type="number" name="amount" required>
+        
+        <button type="submit">Add Expense</button>
+    </form>
+</body>
+</html>
+
         <button type="submit">Add Expense</button>
     </form>
 </body>
