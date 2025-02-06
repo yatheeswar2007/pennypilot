@@ -8,3 +8,6 @@ def home():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)  # Required for Render
+    spending_limits = {"food": 500, "shopping": 300, "entertainment": 200, "transport": 150}
+expenses = {"food": 0, "shopping": 0, "entertainment": 0, "transport": 0}
+
