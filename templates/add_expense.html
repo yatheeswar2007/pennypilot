@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense - Pennypilot</title>
+</head>
+<body>
+    <h1>Add an Expense</h1>
+
+    <form method="POST">
+        <label for="category">Category:</label>
+        <select name="category">
+            {% for category in spending_limits.keys() %}
+                <option value="{{ category }}">{{ category.capitalize() }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="amount">Expense Amount (₹):</label>
+        <input type="number" name="amount" required>
+
+        <button type="submit">Add Expense</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('home') }}">
+        <button>Back to Home</button>
+    </a>
+</body>
+</html>
