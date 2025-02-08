@@ -59,3 +59,17 @@
     {% endif %}
 </body>
 </html>
+<!-- Form to Set a New Spending Limit -->
+<h2>Set a Spending Limit:</h2>
+<form method="POST">
+    <input type="hidden" name="action" value="set_limit">
+    
+    <label for="category">Category:</label>
+    <input type="text" name="category" required placeholder="e.g., Food" autocomplete="off">  <!-- FIXED -->
+
+    <label for="new_limit">Spending Limit (₹):</label>
+    <input type="number" name="new_limit" required>
+
+    <button type="submit">Set Limit</button>
+</form>
+
