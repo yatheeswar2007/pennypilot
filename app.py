@@ -2,11 +2,11 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-# Initialize spending limits and expenses as empty dictionaries
+# Initialize spending limits and expenses
 spending_limits = {}
 expenses = {}
 
-@app.route("/", methods=["GET", "POST", "HEAD"])  # Now supports HEAD requests
+@app.route("/", methods=["GET", "POST", "HEAD"])
 def home():
     if request.method == "HEAD":
         return "", 200  # Empty response for HEAD request
@@ -31,7 +31,17 @@ def home():
                 if category in expenses:
                     expenses[category] += float(amount)
 
+        elif action == "remove_category":
+            category = request.form.get("category")
+
+            if category in spending_limits:
+                del spending_limits[category]  # Remove limit
+                del expenses[category]  # Remove expenses
+
     return render_template("index.html", spending_limits=spending_limits, expenses=expenses)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
+
+        
