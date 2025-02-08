@@ -24,20 +24,17 @@
         <p>No spending limits set yet. Add a category below!</p>
     {% endif %}
 
-   <!-- Form to Set a New Spending Limit -->
-<h2>Set a Spending Limit:</h2>
-<form method="POST">
-    <input type="hidden" name="action" value="set_limit">
-    
-    <label for="category">Category:</label>
-    <input type="text" name="category" required placeholder="e.g., Food" autocomplete="off">  <!-- FIXED -->
+    <!-- Form to Set a New Spending Limit -->
+    <h2>Set a Spending Limit:</h2>
+    <form method="POST">
+        <input type="hidden" name="action" value="set_limit">
+        <label for="category">Category:</label>
+        <input type="text" name="category" required placeholder="e.g., Food" autocomplete="off">
+        <label for="new_limit">Spending Limit (₹):</label>
+        <input type="number" name="new_limit" required>
+        <button type="submit">Set Limit</button>
+    </form>
 
-    <label for="new_limit">Spending Limit (₹):</label>
-    <input type="number" name="new_limit" required>
-
-    <button type="submit">Set Limit</button>
-</form>
-    
     <!-- Form to Add an Expense -->
     <h2>Add an Expense:</h2>
     {% if spending_limits %}
@@ -49,14 +46,30 @@
                 <option value="{{ category }}">{{ category.capitalize() }}</option>
             {% endfor %}
         </select>
-
         <label for="amount">Expense Amount (₹):</label>
         <input type="number" name="amount" required>
-
         <button type="submit">Add Expense</button>
     </form>
     {% else %}
         <p><em>Set a spending limit first before adding expenses.</em></p>
     {% endif %}
+
+    <!-- Form to Remove a Category -->
+    <h2>Remove a Category:</h2>
+    {% if spending_limits %}
+    <form method="POST">
+        <input type="hidden" name="action" value="remove_category">
+        <label for="category">Category:</label>
+        <select name="category">
+            {% for category in spending_limits.keys() %}
+                <option value="{{ category }}">{{ category.capitalize() }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Remove</button>
+    </form>
+    {% else %}
+        <p><em>No categories to remove.</em></p>
+    {% endif %}
 </body>
 </html>
+
